@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../db/mysql')
+var db = require('../utils/db/mysql')
 const crypto = require('crypto');
-const token = require('../token/token')
-const Response = require('./BaseResponse')
+const token = require('../utils/token/token')
+const Response = require('../utils/base_response')
 
 const SQL_FIND_USER = "SELECT * FROM user WHERE phone = ?"
-const SQL_FIND_SELLER = "SELECT seller_id,username,password,phone,seller_name,store_name,position FROM seller WHERE phone = ?"
+const SQL_FIND_SELLER = "SELECT seller_id,password,phone,seller_name,store_name,position FROM seller WHERE phone = ?"
 
 router.post("/", async function (req, resp) {
     const phone = req.body.phone;
@@ -28,6 +28,7 @@ router.post("/", async function (req, resp) {
 
         const md5 = crypto.createHash('md5')
         password = md5.update(password, 'utf-8').digest('hex');
+        console.log(password)
         if (result[0].password === password) {
             var body = result[0]
             delete body.password

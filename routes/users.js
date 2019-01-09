@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../db/mysql')
-var Response = require('./BaseResponse')
+var db = require('../utils/db/mysql')
+var Response = require('../utils/base_response')
 
 router.use("/", function (req, res, next) {
     req.json = req.body
