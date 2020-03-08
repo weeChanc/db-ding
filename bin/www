@@ -7,6 +7,18 @@
 var app = require('../app');
 var debug = require('debug')('db-ding:server');
 var http = require('http');
+var https = require('https');
+var fs = require('fs');
+var path = require('path');
+
+var options = {
+  key:fs.readFileSync(path.join(__dirname,'../utils/auth/server.key')),
+  cert:fs.readFileSync(path.join(__dirname,'../utils/auth/server.crt'))
+}
+
+// var httpsService = https.createServer(options,app);
+var httpService = http.createServer(app);
+
 
 /**
  * Get port from environment and store in Express.
@@ -19,15 +31,19 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+//
+// httpsService.listen(3001)
+// httpsService.on('error',onError);
+// httpsService.on('listening',onListeningHttps)
+
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+httpService.listen(port);
+httpService.on('error', onError);
+httpService.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -82,9 +98,17 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
+  var addr = httpService.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+function onListeningHttps() {
+  var addr = httpsService.address();
+  var bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }

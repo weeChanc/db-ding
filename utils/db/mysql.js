@@ -55,7 +55,8 @@ module.exports = {
                         if (err) {
                             reject(err)
                         } else {
-                            resolve(rows)
+
+                            resolve( JSON.parse(JSON.stringify(rows)))
                         }
                         // 结束会话
                         connection.release()
@@ -117,3 +118,5 @@ module.exports = {
         })
     }
 }
+
+

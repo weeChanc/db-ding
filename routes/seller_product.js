@@ -5,10 +5,13 @@ var Response = require('../utils/base_response')
 
 const SQL_INSERT_DISH = "INSERT INTO product_info (category_id,product_name,product_description,product_icon) VALUES (?,?,?,?)"
 const SQL_INSERT_SEPC = "INSERT INTO product_spec (product_id,spec,price) VALUES (?,?,?)"
+
+//查询类目下的菜式
 const SQL_SELECT_CATEGORY_DISH = "SELECT I.*,any_value(min(price)) min_price FROM product_info I,product_spec S \n" +
     "WHERE I.product_id=S.product_id AND category_id = ?\n" +
     "GROUP BY product_id"
 
+//查询所有类目下的所有数据
 const SQL_ALL_DISHES = `
 SELECT C.*,D.spec_id,D.spec,D.price FROM
 (SELECT A.*,B.product_name,B.product_description,B.product_icon,B.product_id 
@@ -31,8 +34,10 @@ router.get("/", async function (req, resp) {
     async function queryBySellerId() {
         const id = req.query.sellerId
         try{
+            //查询结果
             const result = await db.exec(SQL_ALL_DISHES,[id])
             const obj = {}
+            //对查询结果进行再次封装
             for ( const item of result){
                 const key = item.category_id
                 if(!obj[key]){
@@ -41,6 +46,7 @@ router.get("/", async function (req, resp) {
                 obj[key].push(item)
             }
             const obj2 = []
+            //将菜目装入结果中
             for(const key in obj){
                 var obj3 = {}
                 obj3.name = obj[key][0].category_name
@@ -54,6 +60,7 @@ router.get("/", async function (req, resp) {
                 }
                 obj2.push(obj3);
             }
+            //返回结果
             resp.send(Response.createSuccess(obj2))
         }catch (e) {
             console.log(e)

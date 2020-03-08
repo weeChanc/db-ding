@@ -6,6 +6,11 @@ var logger = require('morgan');
 const multipart = require('./utils/multipart/multipart')
 const auth = require('./utils/auth/auth')
 const cross = require('./utils/cross/cross')
+var fs = require('fs');
+
+
+
+//同步读取密钥和签名证书
 
 
 var indexRouter = require('./routes/index');
@@ -38,6 +43,8 @@ app.use('/order',orderRouter)
 app.use('/report',reportRouter)
 
 
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -47,3 +54,4 @@ app.use(function (req, res, next) {
 
 
 module.exports = app;
+

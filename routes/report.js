@@ -16,15 +16,25 @@ router.get("/daily", async function (req, resp) {
         var result2 = await db.exec("SELECT * FROM seller_daily_report WHERE seller_id = ? AND date = ? ", [sellerId, yd])
         result1 = result1[0]
         result2 = result2[0]
+        if(result1 === undefined){
+            result1 ={}
+            result1.count = 0 ;
+            result1.amount = 0 ;
+        }
+
+        if(result2 === undefined){
+            result2 ={}
+            result2.count = 0 ;
+            result2.amount = 0 ;
+        }
         Object.assign(result1, {
             "order_gap": result1.count - result2.count,
             "amount_gap": result1.amount - result2.amount
         })
         resp.send(Response.createSuccess(result1))
     } catch (e) {
-        resp.send(Response.createError(e))
+        resp.send(Response.createError(-1,e))
     }
-
 })
 
 module.exports = router

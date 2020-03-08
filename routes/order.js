@@ -50,7 +50,6 @@ router.post("/", async function (req, resp) {
     } finally {
         conn.release()
     }
-
     // db.execBy(,,conn)
 })
 
@@ -59,12 +58,15 @@ router.get("/", async function (req, resp) {
     async function getAllUserOrder(userId) {
         const sql = "SELECT * FROM order_master WHERE user_id = ? order by create_time desc";
         const orders = await db.exec(sql, [userId])
-        resp.send(Response.createSuccess(orders))
+        var resa = Response.createSuccess(orders);
+        resp.send(resa)
     }
 
     async function getAllCustomerOrder(sellerId) {
         const sql = "SELECT * FROM order_view WHERE seller_id = ? order by create_time desc"
         const orders = await db.exec(sql, [sellerId])
+        console.log("GGGG")
+        console.log(orders)
         resp.send(Response.createSuccess(orders))
     }
 
@@ -76,8 +78,6 @@ router.get("/", async function (req, resp) {
     } catch (e) {
         resp.send(Response.createError(e))
     }
-
-
 })
 
 router.get("/todo", async function (req, resp) {
