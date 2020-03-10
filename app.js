@@ -21,6 +21,7 @@ var sellerProductRouter = require('./routes/seller_product')
 var sellerCategoryRouter = require('./routes/seller_category')
 var orderRouter = require("./routes/order")
 var reportRouter = require('./routes/report')
+var birthRouter = require('./routes/birth')
 
 
 
@@ -41,6 +42,7 @@ app.use('/seller/category', sellerCategoryRouter)//店铺食物分类
 app.use('/seller/product', sellerProductRouter) //获取店铺的商品信息
 app.use('/order',orderRouter)
 app.use('/report',reportRouter)
+app.use('/selected',birthRouter)
 
 
 
